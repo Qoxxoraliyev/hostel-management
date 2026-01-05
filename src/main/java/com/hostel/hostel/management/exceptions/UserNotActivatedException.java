@@ -1,4 +1,4 @@
-package com.hostel.hostel.management.security;
+package com.hostel.hostel.management.exceptions;
 
 import org.springframework.security.core.AuthenticationException;
 

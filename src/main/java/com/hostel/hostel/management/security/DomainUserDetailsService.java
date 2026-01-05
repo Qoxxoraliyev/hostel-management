@@ -1,6 +1,7 @@
 package com.hostel.hostel.management.security;
 import com.hostel.hostel.management.entity.Authority;
 import com.hostel.hostel.management.entity.User;
+import com.hostel.hostel.management.exceptions.UserNotActivatedException;
 import com.hostel.hostel.management.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.security.core.GrantedAuthority;
