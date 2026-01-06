@@ -44,6 +44,12 @@ public class UserService {
         this.authorityRepository = authorityRepository;
     }
 
+    @Transactional(readOnly = true)
+    public Optional<User> getUserWithAuthorities() {
+        return SecurityUtils.getCurrentUserLogin()
+                .flatMap(userRepository::findOneWithAuthoritiesByLogin);
+    }
+
 
     public User registerUser(AdminUserDTO dto, String password) {
         userRepository.findOneByLogin(dto.getLogin().toLowerCase())

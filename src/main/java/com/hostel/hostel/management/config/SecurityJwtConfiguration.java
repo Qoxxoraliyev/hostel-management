@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 public class SecurityJwtConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(SecurityJwtConfiguration.class);
+    private static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
 
     @Value("${security.jwt.base64-secret}")
     private String jwtKey;
@@ -28,8 +29,6 @@ public class SecurityJwtConfiguration {
 
     @Value("${security.jwt.token-validity-seconds-remember-me}")
     private long tokenValiditySecondsForRememberMe;
-
-    private static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
 
     @Bean
     public JwtEncoder jwtEncoder() {
@@ -53,6 +52,4 @@ public class SecurityJwtConfiguration {
     public long getTokenValiditySecondsForRememberMe() {
         return tokenValiditySecondsForRememberMe;
     }
-
 }
-
