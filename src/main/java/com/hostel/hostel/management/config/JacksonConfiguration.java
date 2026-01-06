@@ -12,12 +12,13 @@ import java.time.LocalTime;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration
 public class JacksonConfiguration {
 
-    public JavaTimeModule javaTimeModule(){
-        final JavaTimeModule javaTime=new JavaTimeModule();
+
+    @Bean
+    public JavaTimeModule javaTimeModule() {
+        JavaTimeModule javaTime = new JavaTimeModule();
         javaTime.addSerializer(
                 LocalTime.class,
                 new JsonSerializer<LocalTime>() {
@@ -30,14 +31,18 @@ public class JacksonConfiguration {
         return javaTime;
     }
 
+
     @Bean
-    public Jdk8Module jdk8TimeModule(){
+    public Jdk8Module jdk8Module() {
         return new Jdk8Module();
     }
 
-    public Hibernate6Module hibernate6Module(){
-        return new Hibernate6Module().configure(Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS,true);
+
+    @Bean
+    public Hibernate6Module hibernate6Module() {
+        Hibernate6Module module = new Hibernate6Module();
+        module.configure(Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS, true);
+        module.enable(Feature.FORCE_LAZY_LOADING);
+        return module;
     }
-
-
 }

@@ -41,6 +41,26 @@ public class MailService {
     }
 
     @Async
+    public void sendCreationEmail(User user) {
+        String subject = "Your account has been created";
+
+        String content = """
+            Hello %s,
+
+            Your account has been created by admin.
+
+            Login: %s
+            Please activate your account using the activation email.
+
+            Regards,
+            Hostel Management
+            """.formatted(user.getLogin(), user.getLogin());
+
+        sendEmail(user.getEmail(), subject, content, false);
+    }
+
+
+    @Async
     public void sendPasswordResetMail(User user) {
         String subject = "Password Reset Request";
         String resetUrl = "http://localhost:8080/reset-password?key=" + user.getResetKey();

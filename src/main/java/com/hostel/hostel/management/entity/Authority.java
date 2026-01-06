@@ -5,14 +5,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Persistable;
-
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "hostel_authority")
 @JsonIgnoreProperties(value = {"new","id"})
-@SuppressWarnings("common-java:DublicatedBlocks")
 public class Authority implements Serializable, Persistable<String> {
 
     private static final long serialVersionUID=1L;

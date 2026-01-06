@@ -78,6 +78,12 @@ public class UserService {
     }
 
 
+    @Transactional(readOnly = true)
+    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
+        return userRepository.findOneWithAuthoritiesByLogin(login);
+    }
+
+
     public Optional<User> activateRegistration(String key) {
         return userRepository.findOneByActivationKey(key)
                 .map(user -> {
