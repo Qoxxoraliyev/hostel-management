@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.BatchSize;
 import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.time.Instant;

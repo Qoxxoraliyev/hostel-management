@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -14,28 +15,31 @@ import java.time.Instant;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"createdBy","createdDate","lastModifiedBy","lastModifiedDate"},allowGetters = true)
+@JsonIgnoreProperties(
+        value = {"createdBy","createdDate","lastModifiedBy","lastModifiedDate"},
+        allowGetters = true
+)
 public abstract class AbstractAuditingEntity<T> implements Serializable {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     public abstract T getId();
 
-    @CreatedDate
-    @Column(name = "created_date",updatable = false)
+    @CreatedBy
+    @Column(name = "created_by", length = 50, updatable = false)
     private String createdBy;
 
-    @CreatedDate()
-    @Column(name = "created_date",updatable = false)
-    private Instant createdDate=Instant.now();
+    @CreatedDate
+    @Column(name = "created_date", updatable = false)
+    private Instant createdDate;
 
     @LastModifiedBy
-    @Column(name = "last_modified_by",length = 50)
+    @Column(name = "last_modified_by", length = 50)
     private String lastModifiedBy;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
-    private Instant lastModifiedDate=Instant.now();
+    private Instant lastModifiedDate;
 
     public String getCreatedBy() {
         return createdBy;

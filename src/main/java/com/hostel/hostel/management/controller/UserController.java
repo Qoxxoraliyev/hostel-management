@@ -1,5 +1,4 @@
 package com.hostel.hostel.management.controller;
-
 import com.hostel.hostel.management.config.Constants;
 import com.hostel.hostel.management.entity.User;
 import com.hostel.hostel.management.exceptions.EmailAlreadyUsedException;
