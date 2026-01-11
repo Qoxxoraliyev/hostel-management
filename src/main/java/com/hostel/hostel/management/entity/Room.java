@@ -16,19 +16,20 @@ public class Room implements Serializable {
     @Column(name = "room_id")
     private Long roomId;
 
-    @Column(name = "room_number")
+    @Column(name = "room_number",nullable = false)
     private Integer roomNumber;
 
+    @Column(nullable = false)
     private Integer capacity;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Student> students;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "floor_id",nullable = false)
     private Floor floor;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Furniture> furnitures;
 
 

@@ -15,9 +15,10 @@ public class Furniture implements Serializable {
     @Column(name = "furniture_id")
     private Long furnitureId;
 
-    @Column(name = "furniture_type")
+    @Column(name = "furniture_type",nullable = false,length = 100)
     private String furnitureType;
 
+    @Column(nullable = false)
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)

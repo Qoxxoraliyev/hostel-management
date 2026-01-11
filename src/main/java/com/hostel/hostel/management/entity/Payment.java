@@ -19,18 +19,18 @@ public class Payment implements Serializable {
     @Column(name = "payment_id")
     private Long paymentId;
 
-    @Column(name = "amount_paid")
+    @Column(name = "amount_paid",nullable = false,precision = 10,scale = 2)
     private BigDecimal amountPaid;
 
     @Column(name = "payment_date")
     private Date paymentDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_method")
+    @Column(name = "payment_method",nullable = false)
     private PaymentMethod paymentMethod;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_status")
+    @Column(name = "payment_status",nullable = false)
     private PaymentStatus paymentStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)

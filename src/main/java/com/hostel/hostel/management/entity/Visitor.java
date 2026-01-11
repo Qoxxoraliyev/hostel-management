@@ -18,10 +18,13 @@ public class Visitor implements Serializable {
 
     private String name;
 
+    @Column(name = "time_in")
     private Time timeIn;
 
+    @Column(name = "time_out")
     private Time timeOut;
 
+    @Column(name = "visit_date")
     private Date visitDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

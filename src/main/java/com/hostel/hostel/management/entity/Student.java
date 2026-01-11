@@ -3,7 +3,6 @@ package com.hostel.hostel.management.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -18,25 +17,26 @@ public class Student implements Serializable {
     @Column(name = "student_id")
     private Long studentId;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name",nullable = false,length =150)
     private String fullName;
 
+    @Column(nullable = false)
     private Integer age;
 
+    @Column(length = 20)
     private String phone;
 
+    @Temporal(TemporalType.DATE)
     private Date dob;
-
-    private BigInteger room_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id",nullable = false)
     private Room room;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Fee> fees;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Payment> payments;
 
     @OneToMany(mappedBy = "student")
