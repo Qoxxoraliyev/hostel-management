@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "hostel")
@@ -28,6 +29,11 @@ public class Hostel implements Serializable {
     @Column(name = "annual_expenses",precision = 12,scale = 2)
     private BigDecimal annualExpenses;
 
+    @OneToMany(mappedBy = "hostel")
+    private List<Mess> messes;
+
+    @OneToMany(mappedBy = "hostel")
+    private List<Floor> floors;
 
     public Hostel(){}
 
@@ -67,6 +73,21 @@ public class Hostel implements Serializable {
         this.annualExpenses = annualExpenses;
     }
 
+    public List<Mess> getMesses() {
+        return messes;
+    }
+
+    public void setMesses(List<Mess> messes) {
+        this.messes = messes;
+    }
+
+    public List<Floor> getFloors() {
+        return floors;
+    }
+
+    public void setFloors(List<Floor> floors) {
+        this.floors = floors;
+    }
 
     @Override
     public String toString(){
