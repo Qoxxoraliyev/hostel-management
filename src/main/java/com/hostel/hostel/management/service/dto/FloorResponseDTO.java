@@ -5,5 +5,5 @@ import java.util.List;
 public record FloorResponseDTO(
         Long floorId,
         Integer floorNumber,
-        List<RoomDTO> rooms
+        List<RoomResponseDTO> rooms
 ) {}

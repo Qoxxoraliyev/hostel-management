@@ -12,5 +12,5 @@ public record HostelDetailDTO(
         Integer totalRooms,
         BigDecimal annualExpenses,
         List<FloorResponseDTO> floors,
-        List<MessDTO> messes
+        List<MessResponseDTO> messes
 ){}
