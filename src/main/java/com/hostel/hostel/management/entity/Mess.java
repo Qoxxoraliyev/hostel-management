@@ -60,6 +60,14 @@ public class Mess implements Serializable {
         this.hostel = hostel;
     }
 
+    public List<MessEmployee> getMessEmployees() {
+        return messEmployees;
+    }
+
+    public void setMessEmployees(List<MessEmployee> messEmployees) {
+        this.messEmployees = messEmployees;
+    }
+
     @Override
     public String toString() {
         return "Mess{" +

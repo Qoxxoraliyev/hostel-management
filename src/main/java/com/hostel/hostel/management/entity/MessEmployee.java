@@ -29,4 +29,52 @@ public class MessEmployee implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mess_id",nullable = false)
     private Mess mess;
+
+    public MessEmployee(){}
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Mess getMess() {
+        return mess;
+    }
+
+    public void setMess(Mess mess) {
+        this.mess = mess;
+    }
+
+
 }

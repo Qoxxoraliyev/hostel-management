@@ -31,5 +31,49 @@ public class Visitor implements Serializable {
     @JoinColumn(name = "student_id")
     private Student student;
 
+    public Long getVisitorId() {
+        return visitorId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Time getTimeIn() {
+        return timeIn;
+    }
+
+    public void setTimeIn(Time timeIn) {
+        this.timeIn = timeIn;
+    }
+
+    public Time getTimeOut() {
+        return timeOut;
+    }
+
+    public void setTimeOut(Time timeOut) {
+        this.timeOut = timeOut;
+    }
+
+    public Date getVisitDate() {
+        return visitDate;
+    }
+
+    public void setVisitDate(Date visitDate) {
+        this.visitDate = visitDate;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
 
 }

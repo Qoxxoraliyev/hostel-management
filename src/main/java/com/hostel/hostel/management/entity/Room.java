@@ -32,5 +32,49 @@ public class Room implements Serializable {
     @OneToMany(mappedBy = "room",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Furniture> furnitures;
 
+    public Long getRoomId() {
+        return roomId;
+    }
+
+    public Integer getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(Integer roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    public Floor getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Floor floor) {
+        this.floor = floor;
+    }
+
+    public List<Furniture> getFurnitures() {
+        return furnitures;
+    }
+
+    public void setFurnitures(List<Furniture> furnitures) {
+        this.furnitures = furnitures;
+    }
+
 
 }

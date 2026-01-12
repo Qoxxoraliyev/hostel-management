@@ -30,4 +30,41 @@ public class Fee implements Serializable {
 
     @OneToMany(mappedBy = "fee",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Payment> payments;
+
+    public Long getFeeId() {
+        return feeId;
+    }
+
+    public BigDecimal getMonth() {
+        return month;
+    }
+
+    public void setMonth(BigDecimal month) {
+        this.month = month;
+    }
+
+    public String getFeeType() {
+        return feeType;
+    }
+
+    public void setFeeType(String feeType) {
+        this.feeType = feeType;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
+
 }
