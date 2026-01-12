@@ -1,8 +1,6 @@
 package com.hostel.hostel.management.service.mapper;
 
 import com.hostel.hostel.management.entity.Hostel;
-import com.hostel.hostel.management.service.dto.HostelRequestDTO;
-import com.hostel.hostel.management.service.dto.HostelResponseDTO;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,7 +1,7 @@
 package com.hostel.hostel.management.service.dto;
 
-public record HostelResponseDTO(
-        Long id,
+public record HostelShortDTO(
+        Long hostelId,
         String name,
         String location
-) {}
+){}
