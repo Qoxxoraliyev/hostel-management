@@ -1,18 +1,26 @@
 package com.hostel.hostel.management.service;
 
-import com.hostel.hostel.management.repository.HostelRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-@Service
-@Transactional(readOnly = true)
-public class HostelService {
 
-    private final HostelRepository hostelRepository;
+import com.hostel.hostel.management.service.dto.HostelCreateDTO;
+import com.hostel.hostel.management.service.dto.HostelDetailDTO;
 
-    public HostelService(HostelRepository hostelRepository) {
-        this.hostelRepository = hostelRepository;
-    }
+import org.springframework.data.domain.Pageable;
+import java.util.List;
 
+public interface HostelService {
 
+    HostelDetailDTO create(HostelCreateDTO hostelCreateDTO);
+
+    List<HostelDetailDTO> getByName(String name);
+
+    HostelDetailDTO update(Long hostelId,HostelCreateDTO hostelCreateDTO);
+
+    HostelDetailDTO getById(Long hostelId);
+
+    void delete(Long hostelId);
+
+    List<HostelDetailDTO> getAll(Pageable pageable);
+
+    List<HostelDetailDTO> getActiveHostels(Pageable pageable);
 
 }
