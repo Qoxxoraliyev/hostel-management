@@ -18,5 +18,5 @@ public interface FeeService {
 
     List<FeeResponseDTO> getAll(Pageable pageable);
 
-
+    List<FeeResponseDTO> getByFeeType(String feeType);
 }

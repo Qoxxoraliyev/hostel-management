@@ -1,0 +1,68 @@
+package com.hostel.hostel.management.service.impl;
+
+import com.hostel.hostel.management.entity.Furniture;
+import com.hostel.hostel.management.exceptions.FurnitureNotFoundException;
+import com.hostel.hostel.management.repository.FurnitureRepository;
+import com.hostel.hostel.management.service.FurnitureService;
+import com.hostel.hostel.management.service.dto.FurnitureCreateDTO;
+import com.hostel.hostel.management.service.dto.FurnitureResponseDTO;
+import com.hostel.hostel.management.service.mapper.FurnitureMapper;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class FurnitureServiceImpl implements FurnitureService {
+
+    private final FurnitureRepository furnitureRepository;
+
+    public FurnitureServiceImpl(FurnitureRepository furnitureRepository) {
+        this.furnitureRepository = furnitureRepository;
+    }
+
+
+    @Override
+    public FurnitureResponseDTO create(FurnitureCreateDTO furnitureCreateDTO){
+        Furniture furniture= FurnitureMapper.toEntity(furnitureCreateDTO);
+        Furniture saved=furnitureRepository.save(furniture);
+        return FurnitureMapper.toResponse(saved);
+    }
+
+
+    @Override
+    public FurnitureResponseDTO update(Long furnitureId,FurnitureCreateDTO furnitureCreateDTO){
+        Furniture furniture=furnitureRepository.findById(furnitureId).orElseThrow(()->new FurnitureNotFoundException("Furniture not found wth id: "+furnitureId));
+        furniture.setFurnitureType(furnitureCreateDTO.furnitureType());
+        furniture.setQuantity(furnitureCreateDTO.quantity());
+        Furniture saved=furnitureRepository.save(furniture);
+        return FurnitureMapper.toResponse(saved);
+    }
+
+
+    @Override
+    public FurnitureResponseDTO getById(Long furnitureId){
+        Furniture furniture=furnitureRepository.findById(furnitureId).orElseThrow(()->new FurnitureNotFoundException("Furniture not found with id: "+furnitureId));
+        return FurnitureMapper.toResponse(furniture);
+    }
+
+
+    @Override
+    public void delete(Long furnitureId){
+        Furniture furniture=furnitureRepository.findById(furnitureId).orElseThrow(()->new FurnitureNotFoundException("Furniture not found with id: "+furnitureId));
+        furnitureRepository.delete(furniture);
+    }
+
+
+    @Override
+    public List<FurnitureResponseDTO> getAll(Pageable pageable){
+        return furnitureRepository.findAll(pageable)
+                .getContent()
+                .stream()
+                .map(FurnitureMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+
+}

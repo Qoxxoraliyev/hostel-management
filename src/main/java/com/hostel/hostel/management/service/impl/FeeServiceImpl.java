@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class FeeServiceImpl implements FeeService {
 
-    private FeeRepository feeRepository;
+    private final FeeRepository feeRepository;
 
     public FeeServiceImpl(FeeRepository feeRepository) {
         this.feeRepository = feeRepository;
@@ -65,6 +65,16 @@ public class FeeServiceImpl implements FeeService {
     public List<FeeResponseDTO> getAll(Pageable pageable){
         return feeRepository.findAll(pageable)
                 .getContent()
+                .stream()
+                .map(FeeMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+
+
+    @Override
+    public List<FeeResponseDTO> getByFeeType(String feeType){
+        return feeRepository.findByFeeTypeIgnoreCase(feeType)
                 .stream()
                 .map(FeeMapper::toResponse)
                 .collect(Collectors.toList());

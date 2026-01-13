@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class HostelServiceImpl implements HostelService {
 
-    private HostelRepository hostelRepository;
+    private final HostelRepository hostelRepository;
 
     public HostelServiceImpl(HostelRepository hostelRepository) {
         this.hostelRepository = hostelRepository;
@@ -75,8 +75,7 @@ public class HostelServiceImpl implements HostelService {
     public void delete(Long hostelId){
         Hostel hostel=hostelRepository.findById(hostelId)
                 .orElseThrow(()->new HostelNotFoundException(
-                        "Hostel not found with id: "+hostelId
-                ));
+                        "Hostel not found with id: "+hostelId));
         hostelRepository.delete(hostel);
     }
 
