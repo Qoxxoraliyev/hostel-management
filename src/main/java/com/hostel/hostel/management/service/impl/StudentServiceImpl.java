@@ -7,7 +7,11 @@ import com.hostel.hostel.management.service.StudentService;
 import com.hostel.hostel.management.service.dto.StudentCreateDTO;
 import com.hostel.hostel.management.service.dto.StudentResponseDTO;
 import com.hostel.hostel.management.service.mapper.StudentMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -48,6 +52,17 @@ public class StudentServiceImpl implements StudentService {
     public void delete(Long studentId){
         Student student=studentRepository.findById(studentId).orElseThrow(()->new StudentNotFoundException("Student not found with id: "+studentId));
         studentRepository.delete(student);
+    }
+
+
+
+    @Override
+    public List<StudentResponseDTO> getAll(Pageable pageable){
+        return studentRepository.findAll(pageable)
+                .getContent()
+                .stream()
+                .map(StudentMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
 
