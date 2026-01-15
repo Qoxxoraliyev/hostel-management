@@ -1,7 +1,8 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.MessEmployee;
-import com.hostel.hostel.management.exceptions.MessNotFoundException;
+import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.MessEmployeeRepository;
 import com.hostel.hostel.management.service.MessEmployeeService;
 import com.hostel.hostel.management.service.dto.MessEmployeeCreateDTO;
@@ -34,7 +35,7 @@ public class MessEmployeeServiceImpl implements MessEmployeeService {
 
     @Override
     public MessEmployeeResponseDTO update(Long messEmployeeId,MessEmployeeCreateDTO messEmployeeCreateDTO){
-        MessEmployee messEmployee=messEmployeeRepository.findById(messEmployeeId).orElseThrow(()->new MessNotFoundException("MessEmployee not found with id: "+messEmployeeId));
+        MessEmployee messEmployee=messEmployeeRepository.findById(messEmployeeId).orElseThrow(()->new AppException(ErrorCode.MESS_EMPLOYEE_NOT_FOUND,"MessEmployee not found with id: "+messEmployeeId));
         messEmployee.setFullName(messEmployeeCreateDTO.fullName());
         messEmployee.setSalary(messEmployeeCreateDTO.salary());
         messEmployee.setAddress(messEmployeeCreateDTO.address());
@@ -47,14 +48,14 @@ public class MessEmployeeServiceImpl implements MessEmployeeService {
 
     @Override
     public MessEmployeeResponseDTO getById(Long messEmployeeId){
-        MessEmployee messEmployee=messEmployeeRepository.findById(messEmployeeId).orElseThrow(()->new MessNotFoundException("MessEmployee not found with id: "+messEmployeeId));
+        MessEmployee messEmployee=messEmployeeRepository.findById(messEmployeeId).orElseThrow(()->new AppException(ErrorCode.MESS_EMPLOYEE_NOT_FOUND,"MessEmployee not found with id: "+messEmployeeId));
         return MessEmployeeMapper.toResponse(messEmployee);
     }
 
 
     @Override
     public void delete(Long messEmployeeId){
-        MessEmployee messEmployee=messEmployeeRepository.findById(messEmployeeId).orElseThrow(()->new MessNotFoundException("MessEmployee not found with id: "+messEmployeeId));
+        MessEmployee messEmployee=messEmployeeRepository.findById(messEmployeeId).orElseThrow(()->new AppException(ErrorCode.MESS_EMPLOYEE_NOT_FOUND,"MessEmployee not found with id: "+messEmployeeId));
         messEmployeeRepository.delete(messEmployee);
     }
 

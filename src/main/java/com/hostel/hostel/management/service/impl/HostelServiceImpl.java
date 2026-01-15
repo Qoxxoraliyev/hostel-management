@@ -1,6 +1,7 @@
 package com.hostel.hostel.management.service.impl;
 import com.hostel.hostel.management.entity.Hostel;
-import com.hostel.hostel.management.exceptions.HostelNotFoundException;
+import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.HostelRepository;
 import com.hostel.hostel.management.service.HostelService;
 import com.hostel.hostel.management.service.dto.HostelCreateDTO;
@@ -35,7 +36,7 @@ public class HostelServiceImpl implements HostelService {
         List<Hostel> hostels=hostelRepository.findByNameContainingIgnoreCase(name);
 
         if (hostels.isEmpty()){
-            throw new HostelNotFoundException("No hostel found containing name: "+name);
+            throw new AppException(ErrorCode.HOSTEL_NOT_FOUND,"Hostel not found with name: "+name);
         }
 
         return hostels.stream()
@@ -47,9 +48,7 @@ public class HostelServiceImpl implements HostelService {
 
     @Override
     public HostelDetailDTO update(Long hostelId,HostelCreateDTO hostelCreateDTO){
-        Hostel hostel=hostelRepository.findById(hostelId).orElseThrow(()->new HostelNotFoundException(
-                "Hostel not found with id: "+hostelId
-        ));
+        Hostel hostel=hostelRepository.findById(hostelId).orElseThrow(()->new AppException(ErrorCode.HOSTEL_NOT_FOUND,"Hostel not found with id :"+hostelId));
         hostel.setLocation(hostelCreateDTO.location());
         hostel.setAnnualExpenses(hostelCreateDTO.annualExpenses());
         hostel.setName(hostelCreateDTO.name());
@@ -63,9 +62,7 @@ public class HostelServiceImpl implements HostelService {
     @Override
     public HostelDetailDTO getById(Long hostelId){
         Hostel hostel=hostelRepository.findById(hostelId)
-                .orElseThrow(()->new HostelNotFoundException(
-                        "Hostel not found with id: "+hostelId
-                ));
+                .orElseThrow(()->new AppException(ErrorCode.HOSTEL_NOT_FOUND,"Hostel not found with id :"+hostelId));
         return HostelMapper.hostelDetailDTO(hostel);
     }
 
@@ -74,8 +71,7 @@ public class HostelServiceImpl implements HostelService {
     @Override
     public void delete(Long hostelId){
         Hostel hostel=hostelRepository.findById(hostelId)
-                .orElseThrow(()->new HostelNotFoundException(
-                        "Hostel not found with id: "+hostelId));
+                .orElseThrow(()->new AppException(ErrorCode.HOSTEL_NOT_FOUND,"Hostel not found with id :"+hostelId));
         hostelRepository.delete(hostel);
     }
 

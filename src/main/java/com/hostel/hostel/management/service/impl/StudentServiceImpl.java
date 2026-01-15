@@ -1,7 +1,8 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Student;
-import com.hostel.hostel.management.exceptions.StudentNotFoundException;
+import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.StudentRepository;
 import com.hostel.hostel.management.service.StudentService;
 import com.hostel.hostel.management.service.dto.StudentCreateDTO;
@@ -31,7 +32,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponseDTO update(Long studentId,StudentCreateDTO studentCreateDTO){
-        Student student=studentRepository.findById(studentId).orElseThrow(()->new StudentNotFoundException("Student not found with id: "+studentId));
+        Student student=studentRepository.findById(studentId).orElseThrow(()->new AppException(ErrorCode.STUDENT_NOT_FOUND,"Student not found with id: "+studentId));
         student.setDob(studentCreateDTO.dob());
         student.setPhone(studentCreateDTO.phone());
         student.setAge(studentCreateDTO.age());
@@ -43,14 +44,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponseDTO getById(Long studentId){
-        Student student=studentRepository.findById(studentId).orElseThrow(()->new StudentNotFoundException("Student not found with id: "+studentId));
+        Student student=studentRepository.findById(studentId).orElseThrow(()->new AppException(ErrorCode.STUDENT_NOT_FOUND,"Student not found with id: "+studentId));
         return StudentMapper.toResponse(student);
     }
 
 
     @Override
     public void delete(Long studentId){
-        Student student=studentRepository.findById(studentId).orElseThrow(()->new StudentNotFoundException("Student not found with id: "+studentId));
+        Student student=studentRepository.findById(studentId).orElseThrow(()->new AppException(ErrorCode.STUDENT_NOT_FOUND,"Student not found with id: "+studentId));
         studentRepository.delete(student);
     }
 

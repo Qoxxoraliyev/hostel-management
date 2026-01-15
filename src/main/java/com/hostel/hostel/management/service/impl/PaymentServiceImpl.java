@@ -1,7 +1,8 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Payment;
-import com.hostel.hostel.management.exceptions.PaymentNotFoundException;
+import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.PaymentRepository;
 import com.hostel.hostel.management.service.PaymentService;
 import com.hostel.hostel.management.service.dto.PaymentCreateDTO;
@@ -33,7 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentResponseDTO update(Long paymentId,PaymentCreateDTO paymentCreateDTO){
-        Payment payment=paymentRepository.findById(paymentId).orElseThrow(()->new PaymentNotFoundException("Payment not found with id: "+paymentId));
+        Payment payment=paymentRepository.findById(paymentId).orElseThrow(()->new AppException(ErrorCode.PAYMENT_NOT_FOUND,"Payment not found with id: "+paymentId));
         payment.setPaymentMethod(paymentCreateDTO.paymentMethod());
         payment.setPaymentStatus(paymentCreateDTO.paymentStatus());
         payment.setPaymentDate(paymentCreateDTO.paymentDate());
@@ -46,14 +47,14 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentResponseDTO getById(Long paymentId){
-        Payment payment=paymentRepository.findById(paymentId).orElseThrow(()->new PaymentNotFoundException("Payment not found with id: "+paymentId));
+        Payment payment=paymentRepository.findById(paymentId).orElseThrow(()->new AppException(ErrorCode.PAYMENT_NOT_FOUND,"Payment not found with id: "+paymentId));
         return PaymentMapper.toResponse(payment);
     }
 
 
     @Override
     public void delete(Long paymentId){
-        Payment payment=paymentRepository.findById(paymentId).orElseThrow(()->new PaymentNotFoundException("Payment not found with id: "+paymentId));
+        Payment payment=paymentRepository.findById(paymentId).orElseThrow(()->new AppException(ErrorCode.PAYMENT_NOT_FOUND,"Payment not found with id: "+paymentId));
         paymentRepository.delete(payment);
     }
 

@@ -1,7 +1,8 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Floor;
-import com.hostel.hostel.management.exceptions.FloorNotFoundException;
+import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.FloorRepository;
 import com.hostel.hostel.management.service.FloorService;
 import com.hostel.hostel.management.service.dto.FloorCreateDTO;
@@ -31,8 +32,7 @@ public class FloorServiceImpl implements FloorService {
 
     @Override
     public FloorResponseDTO update(Long floorId,FloorCreateDTO floorCreateDTO){
-        Floor floor=floorRepository.findById(floorId).orElseThrow(()->new FloorNotFoundException(
-                "Floor not found with id: "+floorId));
+        Floor floor=floorRepository.findById(floorId).orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found with id: "+floorId));
         floor.setFloorNumber(floorCreateDTO.floorNumber());
         Floor saved=floorRepository.save(floor);
         return FloorMapper.toResponse(saved);
@@ -41,14 +41,14 @@ public class FloorServiceImpl implements FloorService {
 
     @Override
     public FloorResponseDTO getById(Long floorId){
-        Floor floor=floorRepository.findById(floorId).orElseThrow(()->new FloorNotFoundException("Floor not Found with id: "+floorId));
+        Floor floor=floorRepository.findById(floorId).orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found with id: "+floorId));
         return FloorMapper.toResponse(floor);
     }
 
 
     @Override
     public void delete(Long floorId){
-        Floor floor=floorRepository.findById(floorId).orElseThrow(()->new FloorNotFoundException("Floor not Found with id: "+floorId));
+        Floor floor=floorRepository.findById(floorId).orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found with id: "+floorId));
         floorRepository.delete(floor);
     }
 

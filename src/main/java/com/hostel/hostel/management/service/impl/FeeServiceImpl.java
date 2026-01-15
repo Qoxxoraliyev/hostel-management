@@ -1,7 +1,8 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Fee;
-import com.hostel.hostel.management.exceptions.FeeNotFoundException;
+import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.FeeRepository;
 import com.hostel.hostel.management.service.FeeService;
 import com.hostel.hostel.management.service.dto.FeeCreateDTO;
@@ -33,9 +34,7 @@ public class FeeServiceImpl implements FeeService {
 
     @Override
     public FeeResponseDTO update(Long feeId,FeeCreateDTO feeCreateDTO){
-        Fee fee=feeRepository.findById(feeId).orElseThrow(()->new FeeNotFoundException(
-                "Fee not found with id: "+feeId
-        ));
+        Fee fee=feeRepository.findById(feeId).orElseThrow(()->new AppException(ErrorCode.FEE_NOT_FOUND,"Fee not found with id: "+feeId));
         fee.setFeeType(feeCreateDTO.feeType());
         fee.setMonth(feeCreateDTO.month());
         Fee updatedFee=feeRepository.save(fee);
@@ -45,18 +44,14 @@ public class FeeServiceImpl implements FeeService {
 
     @Override
     public FeeResponseDTO getById(Long feeId){
-        Fee fee=feeRepository.findById(feeId).orElseThrow(()->new FeeNotFoundException(
-                "Fee not found with id: "+feeId
-        ));
+        Fee fee=feeRepository.findById(feeId).orElseThrow(()->new AppException(ErrorCode.FEE_NOT_FOUND,"Fee not found with id: "+feeId));
         return FeeMapper.toResponse(fee);
     }
 
 
     @Override
     public void delete(Long feeId){
-        Fee fee=feeRepository.findById(feeId).orElseThrow(()->new FeeNotFoundException(
-                "Fee not found with id: "+feeId
-        ));
+        Fee fee=feeRepository.findById(feeId).orElseThrow(()->new AppException(ErrorCode.FEE_NOT_FOUND,"Fee not found with id: "+feeId));
         feeRepository.delete(fee);
     }
 

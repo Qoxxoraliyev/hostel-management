@@ -1,7 +1,8 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Room;
-import com.hostel.hostel.management.exceptions.RoomNotFoundException;
+import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.RoomRepository;
 import com.hostel.hostel.management.service.RoomService;
 import com.hostel.hostel.management.service.dto.RoomCreateDTO;
@@ -32,7 +33,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomResponseDTO update(Long roomId,RoomCreateDTO roomCreateDTO){
-        Room room=roomRepository.findById(roomId).orElseThrow(()->new RoomNotFoundException("Room not found with id: "+roomId));
+        Room room=roomRepository.findById(roomId).orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found with id: "+roomId));
         room.setRoomNumber(roomCreateDTO.roomNumber());
         room.setCapacity(roomCreateDTO.capacity());
         Room saved=roomRepository.save(room);
@@ -42,14 +43,14 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomResponseDTO getById(Long roomId){
-        Room room=roomRepository.findById(roomId).orElseThrow(()->new RoomNotFoundException("Room not found with id: "+roomId));
+        Room room=roomRepository.findById(roomId).orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found with id: "+roomId));
         return RoomMapper.toResponse(room);
     }
 
 
     @Override
     public void delete(Long roomId){
-        Room room=roomRepository.findById(roomId).orElseThrow(()->new RoomNotFoundException("Room not found with id: "+roomId));
+        Room room=roomRepository.findById(roomId).orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found with id: "+roomId));
         roomRepository.delete(room);
     }
 

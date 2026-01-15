@@ -1,7 +1,8 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Mess;
-import com.hostel.hostel.management.exceptions.MessNotFoundException;
+import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.MessRepository;
 import com.hostel.hostel.management.service.MessService;
 import com.hostel.hostel.management.service.dto.MessCreateDTO;
@@ -30,7 +31,7 @@ public class MessServiceImpl implements MessService {
 
     @Override
     public MessResponseDTO update(Long messId,MessCreateDTO messCreateDTO){
-        Mess mess=messRepository.findById(messId).orElseThrow(()->new MessNotFoundException("Mess not Found with id: "+messId));
+        Mess mess=messRepository.findById(messId).orElseThrow(()->new AppException(ErrorCode.MESS_NOT_FOUND,"Mess not found with id: "+messId));
         mess.setMessTiming(messCreateDTO.messTiming());
         mess.setMonthlyExpenses(messCreateDTO.monthlyExpenses());
         Mess saved=messRepository.save(mess);
@@ -40,13 +41,13 @@ public class MessServiceImpl implements MessService {
 
     @Override
     public MessResponseDTO getById(Long messId){
-        Mess mess=messRepository.findById(messId).orElseThrow(()->new MessNotFoundException("Mess not Found with id: "+messId));
+        Mess mess=messRepository.findById(messId).orElseThrow(()->new AppException(ErrorCode.MESS_NOT_FOUND,"Mess not found with id: "+messId));
         return MessMapper.toResponseDTO(mess);
     }
 
     @Override
     public void delete(Long messId){
-        Mess mess=messRepository.findById(messId).orElseThrow(()->new MessNotFoundException("Mess not Found with id: "+messId));
+        Mess mess=messRepository.findById(messId).orElseThrow(()->new AppException(ErrorCode.MESS_NOT_FOUND,"Mess not found with id: "+messId));
         messRepository.delete(mess);
     }
 

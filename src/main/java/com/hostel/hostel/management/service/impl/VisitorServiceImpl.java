@@ -1,7 +1,8 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Visitor;
-import com.hostel.hostel.management.exceptions.VisitorNotFoundException;
+import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.VisitorRepository;
 import com.hostel.hostel.management.service.VisitorService;
 import com.hostel.hostel.management.service.dto.VisitorCreateDTO;
@@ -33,7 +34,7 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Override
     public VisitorResponseDTO update(Long visitorId,VisitorCreateDTO visitorCreateDTO){
-        Visitor visitor=visitorRepository.findById(visitorId).orElseThrow(()->new VisitorNotFoundException("Visitor not found with id: "+visitorId));
+        Visitor visitor=visitorRepository.findById(visitorId).orElseThrow(()->new AppException(ErrorCode.VISITOR_NOT_FOUND,"Visitor not found with id: "+visitorId));
         visitor.setVisitDate(visitorCreateDTO.visitDate());
         visitor.setTimeOut(visitorCreateDTO.timeOut());
         visitor.setName(visitorCreateDTO.name());
@@ -46,14 +47,14 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Override
     public VisitorResponseDTO getById(Long visitorId){
-        Visitor visitor=visitorRepository.findById(visitorId).orElseThrow(()->new VisitorNotFoundException("Visitor not found with id: "+visitorId));
+        Visitor visitor=visitorRepository.findById(visitorId).orElseThrow(()->new AppException(ErrorCode.VISITOR_NOT_FOUND,"Visitor not found with id: "+visitorId));
         return VisitorMapper.toResponse(visitor);
     }
 
 
     @Override
     public void delete(Long visitorId){
-        Visitor visitor=visitorRepository.findById(visitorId).orElseThrow(()->new VisitorNotFoundException("Visitor not found with id: "+visitorId));
+        Visitor visitor=visitorRepository.findById(visitorId).orElseThrow(()->new AppException(ErrorCode.VISITOR_NOT_FOUND,"Visitor not found with id: "+visitorId));
         visitorRepository.delete(visitor);
     }
 

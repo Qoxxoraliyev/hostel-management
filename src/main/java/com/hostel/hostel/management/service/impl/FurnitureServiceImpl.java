@@ -1,7 +1,8 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Furniture;
-import com.hostel.hostel.management.exceptions.FurnitureNotFoundException;
+import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.FurnitureRepository;
 import com.hostel.hostel.management.service.FurnitureService;
 import com.hostel.hostel.management.service.dto.FurnitureCreateDTO;
@@ -33,7 +34,7 @@ public class FurnitureServiceImpl implements FurnitureService {
 
     @Override
     public FurnitureResponseDTO update(Long furnitureId,FurnitureCreateDTO furnitureCreateDTO){
-        Furniture furniture=furnitureRepository.findById(furnitureId).orElseThrow(()->new FurnitureNotFoundException("Furniture not found wth id: "+furnitureId));
+        Furniture furniture=furnitureRepository.findById(furnitureId).orElseThrow(()->new AppException(ErrorCode.FURNITURE_NOT_FOUND,"Furniture not found with id: "+furnitureId));
         furniture.setFurnitureType(furnitureCreateDTO.furnitureType());
         furniture.setQuantity(furnitureCreateDTO.quantity());
         Furniture saved=furnitureRepository.save(furniture);
@@ -43,14 +44,14 @@ public class FurnitureServiceImpl implements FurnitureService {
 
     @Override
     public FurnitureResponseDTO getById(Long furnitureId){
-        Furniture furniture=furnitureRepository.findById(furnitureId).orElseThrow(()->new FurnitureNotFoundException("Furniture not found with id: "+furnitureId));
+        Furniture furniture=furnitureRepository.findById(furnitureId).orElseThrow(()->new AppException(ErrorCode.FURNITURE_NOT_FOUND,"Furniture not found with id: "+furnitureId));
         return FurnitureMapper.toResponse(furniture);
     }
 
 
     @Override
     public void delete(Long furnitureId){
-        Furniture furniture=furnitureRepository.findById(furnitureId).orElseThrow(()->new FurnitureNotFoundException("Furniture not found with id: "+furnitureId));
+        Furniture furniture=furnitureRepository.findById(furnitureId).orElseThrow(()->new AppException(ErrorCode.FURNITURE_NOT_FOUND,"Furniture not found with id: "+furnitureId));
         furnitureRepository.delete(furniture);
     }
 
