@@ -1,7 +1,9 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Fee;
+import com.hostel.hostel.management.entity.Payment;
 import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.enums.FeeStatus;
 import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.FeeRepository;
 import com.hostel.hostel.management.service.FeeService;
@@ -10,7 +12,9 @@ import com.hostel.hostel.management.service.dto.FeeResponseDTO;
 import com.hostel.hostel.management.service.mapper.FeeMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +39,8 @@ public class FeeServiceImpl implements FeeService {
     @Override
     public FeeResponseDTO update(Long feeId,FeeCreateDTO feeCreateDTO){
         Fee fee=feeRepository.findById(feeId).orElseThrow(()->new AppException(ErrorCode.FEE_NOT_FOUND,"Fee not found with id: "+feeId));
-        fee.setFeeType(feeCreateDTO.feeType());
         fee.setMonth(feeCreateDTO.month());
+        fee.setDueDate(feeCreateDTO.dueDate());
         Fee updatedFee=feeRepository.save(fee);
         return FeeMapper.toResponse(updatedFee);
     }
@@ -74,6 +78,28 @@ public class FeeServiceImpl implements FeeService {
                 .map(FeeMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<FeeResponseDTO> getOverdueFees(){
+        return feeRepository.findOverdueFees()
+                .stream()
+                .map(FeeMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+
+
+    @Override
+    public List<FeeResponseDTO> getByStatus(FeeStatus status){
+        return feeRepository.findByStatus(status)
+                .stream()
+                .map(FeeMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+
 
 
 }

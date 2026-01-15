@@ -11,7 +11,8 @@ public class FeeMapper {
     public static Fee toEntity(FeeCreateDTO dto){
         Fee f=new Fee();
         f.setMonth(dto.month());
-        f.setFeeType(dto.feeType());
+        f.setDueDate(dto.dueDate());
+        f.setStatus(dto.status());
         return f;
     }
 
@@ -20,7 +21,8 @@ public class FeeMapper {
         return new FeeResponseDTO(
                 fee.getFeeId(),
                 fee.getMonth(),
-                fee.getFeeType(),
+                fee.getStatus(),
+                fee.getDueDate(),
                 fee.getPayments().stream().map(PaymentMapper::toResponse).toList()
         );
     }

@@ -1,9 +1,12 @@
 package com.hostel.hostel.management.entity;
 
+import com.hostel.hostel.management.enums.FeeStatus;
 import jakarta.persistence.*;
+import jakarta.persistence.Temporal;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 
@@ -21,8 +24,12 @@ public class Fee implements Serializable {
     @Column(nullable = false,precision = 10,scale = 2)
     private BigDecimal month;
 
-    @Column(name = "fee_type",nullable = false,length = 50)
-    private String feeType;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FeeStatus status=FeeStatus.UNPAID;
+
+    @Temporal(TemporalType.DATE)
+    private Date dueDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id",nullable = false)
@@ -43,14 +50,6 @@ public class Fee implements Serializable {
         this.month = month;
     }
 
-    public String getFeeType() {
-        return feeType;
-    }
-
-    public void setFeeType(String feeType) {
-        this.feeType = feeType;
-    }
-
     public Student getStudent() {
         return student;
     }
@@ -65,6 +64,22 @@ public class Fee implements Serializable {
 
     public void setPayments(List<Payment> payments) {
         this.payments = payments;
+    }
+
+    public FeeStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(FeeStatus status) {
+        this.status = status;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.hostel.hostel.management.service;
 
+import com.hostel.hostel.management.enums.FeeStatus;
 import com.hostel.hostel.management.service.dto.FeeCreateDTO;
 import com.hostel.hostel.management.service.dto.FeeResponseDTO;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,9 @@ public interface FeeService {
     List<FeeResponseDTO> getAll(Pageable pageable);
 
     List<FeeResponseDTO> getByFeeType(String feeType);
+
+    List<FeeResponseDTO> getOverdueFees();
+
+    List<FeeResponseDTO> getByStatus(FeeStatus status);
+
 }
