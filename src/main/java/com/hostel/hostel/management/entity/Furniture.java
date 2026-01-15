@@ -1,5 +1,6 @@
 package com.hostel.hostel.management.entity;
 
+import com.hostel.hostel.management.enums.FurnitureStatus;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -20,6 +21,10 @@ public class Furniture implements Serializable {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false,length = 10)
+    private FurnitureStatus status=FurnitureStatus.OK;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id",nullable = false)

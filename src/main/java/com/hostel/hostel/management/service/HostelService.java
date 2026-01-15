@@ -1,10 +1,10 @@
 package com.hostel.hostel.management.service;
 
 
-import com.hostel.hostel.management.entity.HostelExpenses;
 import com.hostel.hostel.management.service.dto.HostelCreateDTO;
 import com.hostel.hostel.management.service.dto.HostelDetailDTO;
 
+import com.hostel.hostel.management.service.dto.HostelExpensesResponseDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
@@ -31,9 +31,9 @@ public interface HostelService {
 
     Long getEmptyRoomCount(Long hostelId);
 
-    HostelExpenses addExpense(Long hostelId, String description, BigDecimal amount, Date expenseDate);
+    HostelExpensesResponseDTO addExpense(Long hostelId, String description, BigDecimal amount, Date expenseDate);
 
-    List<HostelExpenses> getExpenses(Long hostelId);
+    List<HostelExpensesResponseDTO> getExpenses(Long hostelId);
 
     BigDecimal getMonthlyExpenses(Long hostelId,int year,int month);
 

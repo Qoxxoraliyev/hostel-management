@@ -14,4 +14,5 @@ public interface HostelExpensesRepository extends JpaRepository<HostelExpenses,L
 
     List<HostelExpenses> findByHostelHostelIdAndExpenseDateBetween(Long hostelId, Date startDate,Date endDate);
 
+
 }

@@ -29,6 +29,7 @@ public class HostelMapper {
         return new HostelDetailDTO(
                 h.getHostelId(),
                 h.getName(),
+                h.isActive(),
                 h.getLocation(),
                 h.getTotalRooms(),
                 floors,

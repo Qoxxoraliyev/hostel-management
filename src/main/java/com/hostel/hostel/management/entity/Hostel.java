@@ -22,13 +22,17 @@ public class Hostel implements Serializable {
     @Column(name = "location",nullable = false,length = 150)
     private String location;
 
-
+    @Column(nullable = false)
+    private boolean active = true;
 
     @Column(name = "total_rooms",nullable = false)
     private Integer totalRooms;
 
     @OneToMany(mappedBy = "hostel")
     private List<Mess> messes;
+
+    @OneToMany(mappedBy = "hostel")
+    private List<HostelExpenses> expenses;
 
     @OneToMany(mappedBy = "hostel")
     private List<Floor> floors;
@@ -77,6 +81,22 @@ public class Hostel implements Serializable {
 
     public void setFloors(List<Floor> floors) {
         this.floors = floors;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public List<HostelExpenses> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<HostelExpenses> expenses) {
+        this.expenses = expenses;
     }
 
     @Override
