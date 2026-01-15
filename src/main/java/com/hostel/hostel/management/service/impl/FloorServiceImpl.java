@@ -4,12 +4,14 @@ import com.hostel.hostel.management.entity.Floor;
 import com.hostel.hostel.management.enums.ErrorCode;
 import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.FloorRepository;
+import com.hostel.hostel.management.repository.RoomRepository;
 import com.hostel.hostel.management.service.FloorService;
 import com.hostel.hostel.management.service.dto.FloorCreateDTO;
 import com.hostel.hostel.management.service.dto.FloorResponseDTO;
 import com.hostel.hostel.management.service.mapper.FloorMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,9 +21,14 @@ public class FloorServiceImpl implements FloorService {
 
     private final FloorRepository floorRepository;
 
-    public FloorServiceImpl(FloorRepository floorRepository) {
+    private final RoomRepository roomRepository;
+
+    public FloorServiceImpl(FloorRepository floorRepository, RoomRepository roomRepository) {
         this.floorRepository = floorRepository;
+        this.roomRepository = roomRepository;
     }
+
+
 
     @Override
     public FloorResponseDTO create(FloorCreateDTO floorCreateDTO){
@@ -61,6 +68,23 @@ public class FloorServiceImpl implements FloorService {
                 .map(FloorMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public int getRoomCount(Long floorId){
+        floorRepository.findById(floorId).orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found"));
+        return roomRepository.findByFloorId(floorId).size();
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public int getEmptyRoomCount(Long floorId){
+        floorRepository.findById(floorId).orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found"));
+        return roomRepository.findEmptyRoomsFloor(floorId).size();
+    }
+
 
 
 

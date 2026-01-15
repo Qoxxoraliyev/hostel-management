@@ -17,4 +17,8 @@ public interface FloorService {
     void delete(Long floorId);
 
     List<FloorResponseDTO> getAll(Pageable pageable);
+
+    int getRoomCount(Long floorId);
+
+    int getEmptyRoomCount(Long floorId);
 }
