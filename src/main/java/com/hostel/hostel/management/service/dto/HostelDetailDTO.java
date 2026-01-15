@@ -10,7 +10,6 @@ public record HostelDetailDTO(
         String name,
         String location,
         Integer totalRooms,
-        BigDecimal annualExpenses,
         List<FloorResponseDTO> floors,
         List<MessResponseDTO> messes
 ){}

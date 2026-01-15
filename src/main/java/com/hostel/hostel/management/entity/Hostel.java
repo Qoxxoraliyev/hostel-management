@@ -3,7 +3,6 @@ package com.hostel.hostel.management.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -23,11 +22,10 @@ public class Hostel implements Serializable {
     @Column(name = "location",nullable = false,length = 150)
     private String location;
 
+
+
     @Column(name = "total_rooms",nullable = false)
     private Integer totalRooms;
-
-    @Column(name = "annual_expenses",precision = 12,scale = 2)
-    private BigDecimal annualExpenses;
 
     @OneToMany(mappedBy = "hostel")
     private List<Mess> messes;
@@ -63,14 +61,6 @@ public class Hostel implements Serializable {
 
     public void setTotalRooms(Integer totalRooms) {
         this.totalRooms = totalRooms;
-    }
-
-    public BigDecimal getAnnualExpenses() {
-        return annualExpenses;
-    }
-
-    public void setAnnualExpenses(BigDecimal annualExpenses) {
-        this.annualExpenses = annualExpenses;
     }
 
     public List<Mess> getMesses() {

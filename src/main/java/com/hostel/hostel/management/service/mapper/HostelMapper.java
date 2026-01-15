@@ -12,7 +12,6 @@ public class HostelMapper {
     public static Hostel toEntity(HostelCreateDTO dto){
         Hostel h=new Hostel();
         h.setName(dto.name());
-        h.setAnnualExpenses(dto.annualExpenses());
         h.setTotalRooms(dto.totalRooms());
         h.setLocation(dto.location());
         return h;
@@ -32,7 +31,6 @@ public class HostelMapper {
                 h.getName(),
                 h.getLocation(),
                 h.getTotalRooms(),
-                h.getAnnualExpenses(),
                 floors,
                 messes
         );

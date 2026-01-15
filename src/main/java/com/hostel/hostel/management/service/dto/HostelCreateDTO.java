@@ -5,6 +5,5 @@ import java.math.BigDecimal;
 public record HostelCreateDTO(
         String name,
         String location,
-        Integer totalRooms,
-        BigDecimal annualExpenses
+        Integer totalRooms
 ) {}

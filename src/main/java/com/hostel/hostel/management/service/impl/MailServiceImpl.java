@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 public class MailServiceImpl implements MailService {
@@ -107,6 +108,30 @@ public class MailServiceImpl implements MailService {
         } catch (MailException | MessagingException e) {
             log.error("Failed to send email to {}", to, e);
         }
+    }
+
+
+    @Override
+    @Async
+    public void sendBulkEmail(List<User> users, String subject, String content) {
+        users.parallelStream().forEach(user -> {
+            try {
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper helper =
+                        new MimeMessageHelper(message, false, StandardCharsets.UTF_8.name());
+
+                helper.setTo(user.getEmail());
+                helper.setSubject(subject);
+                helper.setText(content, false);
+                helper.setFrom("noreply@hostel.uz");
+
+                mailSender.send(message);
+                log.info("Email sent to {}", user.getEmail());
+
+            } catch (MailException | MessagingException e) {
+                log.error("Failed to send email to {}", user.getEmail(), e);
+            }
+        });
     }
 
 
