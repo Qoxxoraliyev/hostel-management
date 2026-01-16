@@ -2,6 +2,7 @@ package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Room;
 import com.hostel.hostel.management.enums.ErrorCode;
+import com.hostel.hostel.management.enums.RoomAvailability;
 import com.hostel.hostel.management.exceptions.AppException;
 import com.hostel.hostel.management.repository.RoomRepository;
 import com.hostel.hostel.management.service.RoomService;
@@ -10,6 +11,7 @@ import com.hostel.hostel.management.service.dto.RoomResponseDTO;
 import com.hostel.hostel.management.service.mapper.RoomMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,6 +65,27 @@ public class RoomServiceImpl implements RoomService {
                 .map(RoomMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public int getCurrentOccupancy(Long roomId){
+        Room room=roomRepository.findById(roomId)
+                .orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found"));
+        return room.getStudents().size();
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public RoomAvailability getAvailability(Long roomId){
+        Room room=roomRepository.findById(roomId)
+                .orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found"));
+        return room.getStudents().size()<room.getCapacity()
+                ?RoomAvailability.AVAILABLE
+                :RoomAvailability.FULL;
+    }
+
 
 
 }

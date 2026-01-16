@@ -17,4 +17,7 @@ public interface PaymentService {
     void delete(Long paymentId);
 
     List<PaymentResponseDTO> getAll(Pageable pageable);
+
+    byte[] generateReceiptPdf(Long paymentId);
+
 }

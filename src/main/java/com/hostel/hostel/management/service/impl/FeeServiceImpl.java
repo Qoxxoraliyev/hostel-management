@@ -1,7 +1,6 @@
 package com.hostel.hostel.management.service.impl;
 
 import com.hostel.hostel.management.entity.Fee;
-import com.hostel.hostel.management.entity.Payment;
 import com.hostel.hostel.management.enums.ErrorCode;
 import com.hostel.hostel.management.enums.FeeStatus;
 import com.hostel.hostel.management.exceptions.AppException;
@@ -14,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

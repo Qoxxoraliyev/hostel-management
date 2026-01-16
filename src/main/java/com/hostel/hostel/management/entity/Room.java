@@ -1,5 +1,6 @@
 package com.hostel.hostel.management.entity;
 
+import com.hostel.hostel.management.enums.CleaningStatus;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -21,6 +22,10 @@ public class Room implements Serializable {
 
     @Column(nullable = false)
     private Integer capacity;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cleaning_status",nullable = false)
+    private CleaningStatus cleaningStatus=CleaningStatus.CLEAN;
 
     @OneToMany(mappedBy = "room",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Student> students;
@@ -74,6 +79,14 @@ public class Room implements Serializable {
 
     public void setFurnitures(List<Furniture> furnitures) {
         this.furnitures = furnitures;
+    }
+
+    public CleaningStatus getCleaningStatus() {
+        return cleaningStatus;
+    }
+
+    public void setCleaningStatus(CleaningStatus cleaningStatus) {
+        this.cleaningStatus = cleaningStatus;
     }
 
 

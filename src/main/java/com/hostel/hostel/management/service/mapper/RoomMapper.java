@@ -12,6 +12,7 @@ public class RoomMapper {
         Room r=new Room();
         r.setCapacity(dto.capacity());
         r.setRoomNumber(dto.roomNumber());
+        r.setCleaningStatus(dto.status());
         return r;
     }
 
@@ -20,6 +21,7 @@ public class RoomMapper {
                 r.getRoomId(),
                 r.getRoomNumber(),
                 r.getCapacity(),
+                r.getCleaningStatus(),
                 r.getStudents().stream().map(StudentMapper::toResponse).toList(),
                 r.getFurnitures().stream().map(FurnitureMapper::toResponse).toList()
         );

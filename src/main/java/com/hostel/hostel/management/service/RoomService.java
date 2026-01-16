@@ -1,5 +1,6 @@
 package com.hostel.hostel.management.service;
 
+import com.hostel.hostel.management.enums.RoomAvailability;
 import com.hostel.hostel.management.service.dto.RoomCreateDTO;
 import com.hostel.hostel.management.service.dto.RoomResponseDTO;
 import org.springframework.data.domain.Pageable;
@@ -17,5 +18,9 @@ public interface RoomService {
     void delete(Long roomId);
 
     List<RoomResponseDTO> getAll(Pageable pageable);
+
+    int getCurrentOccupancy(Long roomId);
+
+    RoomAvailability getAvailability(Long roomId);
 
 }
