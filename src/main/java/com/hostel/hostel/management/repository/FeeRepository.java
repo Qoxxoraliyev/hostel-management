@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface FeeRepository extends JpaRepository<Fee,Long> {
 
-    List<Fee> findByFeeTypeIgnoreCase(String feeType);
 
     @Query("""
             SELECT f FROM Fee f

@@ -10,7 +10,8 @@ import java.util.List;
 @Repository
 public interface RoomRepository extends JpaRepository<Room,Long> {
 
-    List<Room> findByFloorId(Long floorId);
+    List<Room> findByFloorFloorId(Long floorId);
+
 
     @Query("""
             SELECT r FROM Room r
@@ -18,5 +19,9 @@ public interface RoomRepository extends JpaRepository<Room,Long> {
             AND SIZE(r.students)<r.capacity
             """)
     List<Room> findEmptyRoomsFloor(Long floorId);
+
+    int countByFloorFloorId(Long floorId);
+
+    int countByFloorFloorIdAndOccupiedFalse(Long floorId);
 
 }

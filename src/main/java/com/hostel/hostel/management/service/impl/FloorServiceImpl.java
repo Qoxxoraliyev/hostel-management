@@ -1,5 +1,4 @@
 package com.hostel.hostel.management.service.impl;
-
 import com.hostel.hostel.management.entity.Floor;
 import com.hostel.hostel.management.enums.ErrorCode;
 import com.hostel.hostel.management.exceptions.AppException;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class FloorServiceImpl implements FloorService {
 
     private final FloorRepository floorRepository;
@@ -29,7 +29,6 @@ public class FloorServiceImpl implements FloorService {
     }
 
 
-
     @Override
     public FloorResponseDTO create(FloorCreateDTO floorCreateDTO){
         Floor floor= FloorMapper.toEntity(floorCreateDTO);
@@ -39,7 +38,7 @@ public class FloorServiceImpl implements FloorService {
 
     @Override
     public FloorResponseDTO update(Long floorId,FloorCreateDTO floorCreateDTO){
-        Floor floor=floorRepository.findById(floorId).orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found with id: "+floorId));
+        Floor floor=getFloorOrThrow(floorId);
         floor.setFloorNumber(floorCreateDTO.floorNumber());
         Floor saved=floorRepository.save(floor);
         return FloorMapper.toResponse(saved);
@@ -47,20 +46,20 @@ public class FloorServiceImpl implements FloorService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public FloorResponseDTO getById(Long floorId){
-        Floor floor=floorRepository.findById(floorId).orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found with id: "+floorId));
-        return FloorMapper.toResponse(floor);
+        return FloorMapper.toResponse(getFloorOrThrow(floorId));
     }
 
 
     @Override
     public void delete(Long floorId){
-        Floor floor=floorRepository.findById(floorId).orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found with id: "+floorId));
-        floorRepository.delete(floor);
+        floorRepository.delete(getFloorOrThrow(floorId));
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<FloorResponseDTO> getAll(Pageable pageable){
         return floorRepository.findAll(pageable)
                 .getContent()
@@ -73,19 +72,23 @@ public class FloorServiceImpl implements FloorService {
     @Override
     @Transactional(readOnly = true)
     public int getRoomCount(Long floorId){
-        floorRepository.findById(floorId).orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found"));
-        return roomRepository.findByFloorId(floorId).size();
+        getFloorOrThrow(floorId);
+        return roomRepository.findByFloorFloorId(floorId).size();
     }
 
 
     @Override
     @Transactional(readOnly = true)
     public int getEmptyRoomCount(Long floorId){
-        floorRepository.findById(floorId).orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found"));
+        getFloorOrThrow(floorId);
         return roomRepository.findEmptyRoomsFloor(floorId).size();
     }
 
 
+    private Floor getFloorOrThrow(Long floorId){
+        return floorRepository.findById(floorId)
+                .orElseThrow(()->new AppException(ErrorCode.FLOOR_NOT_FOUND,"Floor not found with id: "+floorId));
+    }
 
 
 }

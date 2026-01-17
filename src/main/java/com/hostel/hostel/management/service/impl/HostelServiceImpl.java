@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class HostelServiceImpl implements HostelService {
 
     private final HostelRepository hostelRepository;
@@ -43,6 +44,7 @@ public class HostelServiceImpl implements HostelService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<HostelDetailDTO> getByName(String name){
         List<Hostel> hostels=hostelRepository.findByNameContainingIgnoreCase(name);
 
@@ -59,7 +61,7 @@ public class HostelServiceImpl implements HostelService {
 
     @Override
     public HostelDetailDTO update(Long hostelId,HostelCreateDTO hostelCreateDTO){
-        Hostel hostel=hostelRepository.findById(hostelId).orElseThrow(()->new AppException(ErrorCode.HOSTEL_NOT_FOUND,"Hostel not found with id :"+hostelId));
+        Hostel hostel=getHostelOrThrow(hostelId);
         hostel.setLocation(hostelCreateDTO.location());
         hostel.setName(hostelCreateDTO.name());
         hostel.setTotalRooms(hostelCreateDTO.totalRooms());
@@ -70,23 +72,21 @@ public class HostelServiceImpl implements HostelService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public HostelDetailDTO getById(Long hostelId){
-        Hostel hostel=hostelRepository.findById(hostelId)
-                .orElseThrow(()->new AppException(ErrorCode.HOSTEL_NOT_FOUND,"Hostel not found with id :"+hostelId));
-        return HostelMapper.hostelDetailDTO(hostel);
+        return HostelMapper.hostelDetailDTO(getHostelOrThrow(hostelId));
     }
 
 
 
     @Override
     public void delete(Long hostelId){
-        Hostel hostel=hostelRepository.findById(hostelId)
-                .orElseThrow(()->new AppException(ErrorCode.HOSTEL_NOT_FOUND,"Hostel not found with id :"+hostelId));
-        hostelRepository.delete(hostel);
+        hostelRepository.delete(getHostelOrThrow(hostelId));
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<HostelDetailDTO> getAll(Pageable pageable){
         return hostelRepository.findAll(pageable)
                 .getContent()
@@ -97,6 +97,7 @@ public class HostelServiceImpl implements HostelService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<HostelDetailDTO> getActiveHostels(Pageable pageable){
         return hostelRepository.findByActiveTrue(pageable)
                 .getContent()
@@ -120,11 +121,8 @@ public class HostelServiceImpl implements HostelService {
 
 
     @Override
-    @Transactional
     public HostelExpensesResponseDTO addExpense(Long hostelId, String description, BigDecimal amount, Date expenseDate){
-        Hostel hostel1=hostelRepository.findById(hostelId)
-                .orElseThrow(()->new AppException(ErrorCode.HOSTEL_NOT_FOUND,"Hostel not found"));
-
+        Hostel hostel1=getHostelOrThrow(hostelId);
         HostelExpenses hostelExpenses=new HostelExpenses();
         hostelExpenses.setDescription(description);
         hostelExpenses.setHostel(hostel1);
@@ -165,7 +163,7 @@ public class HostelServiceImpl implements HostelService {
     @Override
     public List<HostelExpensesResponseDTO> getExpenses(Long hostelId) {
         List<HostelExpenses> expenses =
-                hostelExpensesRepository.findByHostelHostelId(hostelId); // <-- TO‘G‘RI METOD
+                hostelExpensesRepository.findByHostelHostelId(hostelId);
         if (expenses.isEmpty()) {
             throw new RuntimeException("Expenses not found for hostel id: " + hostelId);
         }
@@ -175,8 +173,10 @@ public class HostelServiceImpl implements HostelService {
     }
 
 
-
-
+    private Hostel getHostelOrThrow(Long hostelId){
+        return hostelRepository.findById(hostelId)
+                .orElseThrow(()->new AppException(ErrorCode.HOSTEL_NOT_FOUND,"Hostel not found with id: "+hostelId));
+    }
 
 
 

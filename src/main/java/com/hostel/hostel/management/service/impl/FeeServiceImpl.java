@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class FeeServiceImpl implements FeeService {
 
     private final FeeRepository feeRepository;
@@ -37,7 +38,7 @@ public class FeeServiceImpl implements FeeService {
 
     @Override
     public FeeResponseDTO update(Long feeId,FeeCreateDTO feeCreateDTO){
-        Fee fee=feeRepository.findById(feeId).orElseThrow(()->new AppException(ErrorCode.FEE_NOT_FOUND,"Fee not found with id: "+feeId));
+        Fee fee=getFeeOrthrow(feeId);
         fee.setMonth(feeCreateDTO.month());
         fee.setDueDate(feeCreateDTO.dueDate());
         Fee updatedFee=feeRepository.save(fee);
@@ -46,20 +47,20 @@ public class FeeServiceImpl implements FeeService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public FeeResponseDTO getById(Long feeId){
-        Fee fee=feeRepository.findById(feeId).orElseThrow(()->new AppException(ErrorCode.FEE_NOT_FOUND,"Fee not found with id: "+feeId));
-        return FeeMapper.toResponse(fee);
+        return FeeMapper.toResponse(getFeeOrthrow(feeId));
     }
 
 
     @Override
     public void delete(Long feeId){
-        Fee fee=feeRepository.findById(feeId).orElseThrow(()->new AppException(ErrorCode.FEE_NOT_FOUND,"Fee not found with id: "+feeId));
-        feeRepository.delete(fee);
+        feeRepository.delete(getFeeOrthrow(feeId));
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<FeeResponseDTO> getAll(Pageable pageable){
         return feeRepository.findAll(pageable)
                 .getContent()
@@ -68,15 +69,6 @@ public class FeeServiceImpl implements FeeService {
                 .collect(Collectors.toList());
     }
 
-
-
-    @Override
-    public List<FeeResponseDTO> getByFeeType(String feeType){
-        return feeRepository.findByFeeTypeIgnoreCase(feeType)
-                .stream()
-                .map(FeeMapper::toResponse)
-                .collect(Collectors.toList());
-    }
 
 
     @Override
@@ -91,6 +83,7 @@ public class FeeServiceImpl implements FeeService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<FeeResponseDTO> getByStatus(FeeStatus status){
         return feeRepository.findByStatus(status)
                 .stream()
@@ -98,6 +91,11 @@ public class FeeServiceImpl implements FeeService {
                 .collect(Collectors.toList());
     }
 
+
+    private Fee getFeeOrthrow(Long feeId){
+        return feeRepository.findById(feeId)
+                .orElseThrow(()->new AppException(ErrorCode.FEE_NOT_FOUND,"Fee not found with id: "+feeId));
+    }
 
 
 
