@@ -10,11 +10,13 @@ import com.hostel.hostel.management.service.dto.StudentResponseDTO;
 import com.hostel.hostel.management.service.mapper.StudentMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
@@ -32,7 +34,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponseDTO update(Long studentId,StudentCreateDTO studentCreateDTO){
-        Student student=studentRepository.findById(studentId).orElseThrow(()->new AppException(ErrorCode.STUDENT_NOT_FOUND,"Student not found with id: "+studentId));
+        Student student=getStudentOrThrow(studentId);
         student.setDob(studentCreateDTO.dob());
         student.setPhone(studentCreateDTO.phone());
         student.setAge(studentCreateDTO.age());
@@ -43,21 +45,21 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public StudentResponseDTO getById(Long studentId){
-        Student student=studentRepository.findById(studentId).orElseThrow(()->new AppException(ErrorCode.STUDENT_NOT_FOUND,"Student not found with id: "+studentId));
-        return StudentMapper.toResponse(student);
+        return StudentMapper.toResponse(getStudentOrThrow(studentId));
     }
 
 
     @Override
     public void delete(Long studentId){
-        Student student=studentRepository.findById(studentId).orElseThrow(()->new AppException(ErrorCode.STUDENT_NOT_FOUND,"Student not found with id: "+studentId));
-        studentRepository.delete(student);
+        studentRepository.delete(getStudentOrThrow(studentId));
     }
 
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<StudentResponseDTO> getAll(Pageable pageable){
         return studentRepository.findAll(pageable)
                 .getContent()
@@ -66,6 +68,10 @@ public class StudentServiceImpl implements StudentService {
                 .collect(Collectors.toList());
     }
 
+    private Student getStudentOrThrow(Long studentId){
+        return studentRepository.findById(studentId)
+                .orElseThrow(()->new AppException(ErrorCode.STUDENT_NOT_FOUND,"Student not found with id: "+studentId));
+    }
 
 
 }

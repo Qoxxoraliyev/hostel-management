@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class RoomServiceImpl implements RoomService {
 
     private final RoomRepository roomRepository;
@@ -35,7 +36,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomResponseDTO update(Long roomId,RoomCreateDTO roomCreateDTO){
-        Room room=roomRepository.findById(roomId).orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found with id: "+roomId));
+        Room room=getRoomOrThrow(roomId);
         room.setRoomNumber(roomCreateDTO.roomNumber());
         room.setCapacity(roomCreateDTO.capacity());
         Room saved=roomRepository.save(room);
@@ -44,16 +45,15 @@ public class RoomServiceImpl implements RoomService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public RoomResponseDTO getById(Long roomId){
-        Room room=roomRepository.findById(roomId).orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found with id: "+roomId));
-        return RoomMapper.toResponse(room);
+        return RoomMapper.toResponse(getRoomOrThrow(roomId));
     }
 
 
     @Override
     public void delete(Long roomId){
-        Room room=roomRepository.findById(roomId).orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found with id: "+roomId));
-        roomRepository.delete(room);
+        roomRepository.delete(getRoomOrThrow(roomId));
     }
 
 
@@ -70,8 +70,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     @Transactional(readOnly = true)
     public int getCurrentOccupancy(Long roomId){
-        Room room=roomRepository.findById(roomId)
-                .orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found"));
+        Room room=getRoomOrThrow(roomId);
         return room.getStudents().size();
     }
 
@@ -79,13 +78,16 @@ public class RoomServiceImpl implements RoomService {
     @Override
     @Transactional(readOnly = true)
     public RoomAvailability getAvailability(Long roomId){
-        Room room=roomRepository.findById(roomId)
-                .orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found"));
+        Room room=getRoomOrThrow(roomId);
         return room.getStudents().size()<room.getCapacity()
                 ?RoomAvailability.AVAILABLE
                 :RoomAvailability.FULL;
     }
 
+    private Room getRoomOrThrow(Long roomId){
+        return roomRepository.findById(roomId)
+                .orElseThrow(()->new AppException(ErrorCode.ROOM_NOT_FOUND,"Room not found with id: "+roomId));
+    }
 
 
 }

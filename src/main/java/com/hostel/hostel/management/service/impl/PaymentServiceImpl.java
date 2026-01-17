@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
@@ -41,7 +42,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentResponseDTO update(Long paymentId,PaymentCreateDTO paymentCreateDTO){
-        Payment payment=paymentRepository.findById(paymentId).orElseThrow(()->new AppException(ErrorCode.PAYMENT_NOT_FOUND,"Payment not found with id: "+paymentId));
+        Payment payment=getPaymentOrThrow(paymentId);
         payment.setPaymentMethod(paymentCreateDTO.paymentMethod());
         payment.setPaymentStatus(paymentCreateDTO.paymentStatus());
         payment.setPaymentDate(paymentCreateDTO.paymentDate());
@@ -53,20 +54,20 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public PaymentResponseDTO getById(Long paymentId){
-        Payment payment=paymentRepository.findById(paymentId).orElseThrow(()->new AppException(ErrorCode.PAYMENT_NOT_FOUND,"Payment not found with id: "+paymentId));
-        return PaymentMapper.toResponse(payment);
+        return PaymentMapper.toResponse(getPaymentOrThrow(paymentId));
     }
 
 
     @Override
     public void delete(Long paymentId){
-        Payment payment=paymentRepository.findById(paymentId).orElseThrow(()->new AppException(ErrorCode.PAYMENT_NOT_FOUND,"Payment not found with id: "+paymentId));
-        paymentRepository.delete(payment);
+        paymentRepository.delete(getPaymentOrThrow(paymentId));
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<PaymentResponseDTO> getAll(Pageable pageable){
         return paymentRepository.findAll(pageable)
                 .getContent()
@@ -155,6 +156,24 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
+
+    private Payment getPaymentOrThrow(Long paymentId){
+        return paymentRepository.findById(paymentId)
+                .orElseThrow(()->new AppException(ErrorCode.PAYMENT_NOT_FOUND,"Payment not found with id: "+paymentId));
+    }
+
+    private void addParagraph(Document doc,String text,Font font) throws DocumentException{
+        Paragraph p=new Paragraph(text,font);
+        p.setSpacingAfter(5);
+        doc.add(p);
+    }
+
+    private void addParagraph(Document doc,String text,Font font,int alignment) throws DocumentException{
+        Paragraph p=new Paragraph(text,font);
+        p.setAlignment(alignment);
+        p.setSpacingAfter(5);
+        doc.add(p);
+    }
 
 
 }

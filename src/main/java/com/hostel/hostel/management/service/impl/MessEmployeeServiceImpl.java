@@ -10,11 +10,13 @@ import com.hostel.hostel.management.service.dto.MessEmployeeResponseDTO;
 import com.hostel.hostel.management.service.mapper.MessEmployeeMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class MessEmployeeServiceImpl implements MessEmployeeService {
 
     private final MessEmployeeRepository messEmployeeRepository;
@@ -35,7 +37,7 @@ public class MessEmployeeServiceImpl implements MessEmployeeService {
 
     @Override
     public MessEmployeeResponseDTO update(Long messEmployeeId,MessEmployeeCreateDTO messEmployeeCreateDTO){
-        MessEmployee messEmployee=messEmployeeRepository.findById(messEmployeeId).orElseThrow(()->new AppException(ErrorCode.MESS_EMPLOYEE_NOT_FOUND,"MessEmployee not found with id: "+messEmployeeId));
+        MessEmployee messEmployee=getMessEmployeeOrThrow(messEmployeeId);
         messEmployee.setFullName(messEmployeeCreateDTO.fullName());
         messEmployee.setSalary(messEmployeeCreateDTO.salary());
         messEmployee.setAddress(messEmployeeCreateDTO.address());
@@ -47,20 +49,20 @@ public class MessEmployeeServiceImpl implements MessEmployeeService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public MessEmployeeResponseDTO getById(Long messEmployeeId){
-        MessEmployee messEmployee=messEmployeeRepository.findById(messEmployeeId).orElseThrow(()->new AppException(ErrorCode.MESS_EMPLOYEE_NOT_FOUND,"MessEmployee not found with id: "+messEmployeeId));
-        return MessEmployeeMapper.toResponse(messEmployee);
+        return MessEmployeeMapper.toResponse(getMessEmployeeOrThrow(messEmployeeId));
     }
 
 
     @Override
     public void delete(Long messEmployeeId){
-        MessEmployee messEmployee=messEmployeeRepository.findById(messEmployeeId).orElseThrow(()->new AppException(ErrorCode.MESS_EMPLOYEE_NOT_FOUND,"MessEmployee not found with id: "+messEmployeeId));
-        messEmployeeRepository.delete(messEmployee);
+        messEmployeeRepository.delete(getMessEmployeeOrThrow(messEmployeeId));
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<MessEmployeeResponseDTO> getAll(Pageable pageable){
         return messEmployeeRepository.findAll(pageable)
                 .getContent()
@@ -70,6 +72,10 @@ public class MessEmployeeServiceImpl implements MessEmployeeService {
     }
 
 
+    private MessEmployee getMessEmployeeOrThrow(Long messEmployeeId){
+        return messEmployeeRepository.findById(messEmployeeId)
+                .orElseThrow(()->new AppException(ErrorCode.MESS_EMPLOYEE_NOT_FOUND,"MessEmployee not found with id: "+messEmployeeId));
+    }
 
 
 }

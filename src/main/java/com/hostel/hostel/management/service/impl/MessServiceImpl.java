@@ -10,10 +10,12 @@ import com.hostel.hostel.management.service.dto.MessResponseDTO;
 import com.hostel.hostel.management.service.mapper.MessMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class MessServiceImpl implements MessService {
 
     private final MessRepository messRepository;
@@ -31,7 +33,7 @@ public class MessServiceImpl implements MessService {
 
     @Override
     public MessResponseDTO update(Long messId,MessCreateDTO messCreateDTO){
-        Mess mess=messRepository.findById(messId).orElseThrow(()->new AppException(ErrorCode.MESS_NOT_FOUND,"Mess not found with id: "+messId));
+        Mess mess=getMessOrThrow(messId);
         mess.setMessTiming(messCreateDTO.messTiming());
         mess.setMonthlyExpenses(messCreateDTO.monthlyExpenses());
         Mess saved=messRepository.save(mess);
@@ -40,19 +42,19 @@ public class MessServiceImpl implements MessService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public MessResponseDTO getById(Long messId){
-        Mess mess=messRepository.findById(messId).orElseThrow(()->new AppException(ErrorCode.MESS_NOT_FOUND,"Mess not found with id: "+messId));
-        return MessMapper.toResponseDTO(mess);
+        return MessMapper.toResponseDTO(getMessOrThrow(messId));
     }
 
     @Override
     public void delete(Long messId){
-        Mess mess=messRepository.findById(messId).orElseThrow(()->new AppException(ErrorCode.MESS_NOT_FOUND,"Mess not found with id: "+messId));
-        messRepository.delete(mess);
+        messRepository.delete(getMessOrThrow(messId));
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<MessResponseDTO> getAll(Pageable pageable){
         return messRepository.findAll(pageable)
                 .getContent()
@@ -60,5 +62,10 @@ public class MessServiceImpl implements MessService {
                 .map(MessMapper::toResponseDTO).toList();
     }
 
+
+    private Mess getMessOrThrow(Long messId){
+        return messRepository.findById(messId)
+                .orElseThrow(()->new AppException(ErrorCode.MESS_NOT_FOUND,"Mess not found with id: "+messId));
+    }
 
 }

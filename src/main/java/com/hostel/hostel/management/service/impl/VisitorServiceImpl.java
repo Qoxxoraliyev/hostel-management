@@ -10,11 +10,13 @@ import com.hostel.hostel.management.service.dto.VisitorResponseDTO;
 import com.hostel.hostel.management.service.mapper.VisitorMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class VisitorServiceImpl implements VisitorService {
 
     private final VisitorRepository visitorRepository;
@@ -34,7 +36,7 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Override
     public VisitorResponseDTO update(Long visitorId,VisitorCreateDTO visitorCreateDTO){
-        Visitor visitor=visitorRepository.findById(visitorId).orElseThrow(()->new AppException(ErrorCode.VISITOR_NOT_FOUND,"Visitor not found with id: "+visitorId));
+        Visitor visitor=getVisitorOrThrow(visitorId);
         visitor.setVisitDate(visitorCreateDTO.visitDate());
         visitor.setTimeOut(visitorCreateDTO.timeOut());
         visitor.setName(visitorCreateDTO.name());
@@ -46,21 +48,21 @@ public class VisitorServiceImpl implements VisitorService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public VisitorResponseDTO getById(Long visitorId){
-        Visitor visitor=visitorRepository.findById(visitorId).orElseThrow(()->new AppException(ErrorCode.VISITOR_NOT_FOUND,"Visitor not found with id: "+visitorId));
-        return VisitorMapper.toResponse(visitor);
+        return VisitorMapper.toResponse(getVisitorOrThrow(visitorId));
     }
 
 
     @Override
     public void delete(Long visitorId){
-        Visitor visitor=visitorRepository.findById(visitorId).orElseThrow(()->new AppException(ErrorCode.VISITOR_NOT_FOUND,"Visitor not found with id: "+visitorId));
-        visitorRepository.delete(visitor);
+        visitorRepository.delete(getVisitorOrThrow(visitorId));
     }
 
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<VisitorResponseDTO> getAll(Pageable pageable){
         return visitorRepository.findAll(pageable)
                 .getContent()
@@ -70,6 +72,10 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
 
+    private Visitor getVisitorOrThrow(Long visitorId){
+        return visitorRepository.findById(visitorId)
+                .orElseThrow(()->new AppException(ErrorCode.STUDENT_NOT_FOUND,"Student not found with id: "+visitorId));
+    }
 
 
 }
