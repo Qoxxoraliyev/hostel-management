@@ -38,7 +38,7 @@ public class FeeServiceImpl implements FeeService {
 
     @Override
     public FeeResponseDTO update(Long feeId,FeeCreateDTO feeCreateDTO){
-        Fee fee=getFeeOrthrow(feeId);
+        Fee fee=getFeeOrThrow(feeId);
         fee.setMonth(feeCreateDTO.month());
         fee.setDueDate(feeCreateDTO.dueDate());
         Fee updatedFee=feeRepository.save(fee);
@@ -49,13 +49,13 @@ public class FeeServiceImpl implements FeeService {
     @Override
     @Transactional(readOnly = true)
     public FeeResponseDTO getById(Long feeId){
-        return FeeMapper.toResponse(getFeeOrthrow(feeId));
+        return FeeMapper.toResponse(getFeeOrThrow(feeId));
     }
 
 
     @Override
     public void delete(Long feeId){
-        feeRepository.delete(getFeeOrthrow(feeId));
+        feeRepository.delete(getFeeOrThrow(feeId));
     }
 
 
@@ -92,7 +92,7 @@ public class FeeServiceImpl implements FeeService {
     }
 
 
-    private Fee getFeeOrthrow(Long feeId){
+    private Fee getFeeOrThrow(Long feeId){
         return feeRepository.findById(feeId)
                 .orElseThrow(()->new AppException(ErrorCode.FEE_NOT_FOUND,"Fee not found with id: "+feeId));
     }

@@ -20,8 +20,5 @@ public interface RoomRepository extends JpaRepository<Room,Long> {
             """)
     List<Room> findEmptyRoomsFloor(Long floorId);
 
-    int countByFloorFloorId(Long floorId);
-
-    int countByFloorFloorIdAndOccupiedFalse(Long floorId);
 
 }
