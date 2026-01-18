@@ -10,6 +10,7 @@ public class FurnitureMapper {
         Furniture f=new Furniture();
         f.setFurnitureType(dto.furnitureType());
         f.setQuantity(dto.quantity());
+        f.setStatus(dto.status());
         return f;
     }
 
@@ -18,7 +19,8 @@ public class FurnitureMapper {
         return new FurnitureResponseDTO(
                 f.getFurnitureId(),
                 f.getFurnitureType(),
-                f.getQuantity()
+                f.getQuantity(),
+                f.getStatus()
         );
     }
 

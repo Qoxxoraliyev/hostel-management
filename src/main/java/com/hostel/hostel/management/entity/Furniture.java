@@ -58,5 +58,11 @@ public class Furniture implements Serializable {
         this.room = room;
     }
 
+    public FurnitureStatus getStatus() {
+        return status;
+    }
 
+    public void setStatus(FurnitureStatus status) {
+        this.status = status;
+    }
 }
