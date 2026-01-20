@@ -16,8 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,7 +120,7 @@ public class HostelServiceImpl implements HostelService {
 
 
     @Override
-    public HostelExpensesResponseDTO addExpense(Long hostelId, String description, BigDecimal amount, Date expenseDate){
+    public HostelExpensesResponseDTO addExpense(Long hostelId, String description, BigDecimal amount, LocalDate expenseDate){
         Hostel hostel1=getHostelOrThrow(hostelId);
         HostelExpenses hostelExpenses=new HostelExpenses();
         hostelExpenses.setDescription(description);
@@ -134,30 +133,36 @@ public class HostelServiceImpl implements HostelService {
 
 
     @Override
-    public BigDecimal getMonthlyExpenses(Long hostelId,int year,int month){
-        Calendar start=Calendar.getInstance();
-        start.set(year,month -1,1,0,0);
-        Calendar end=Calendar.getInstance();
-        end.set(year,month-1,start.getActualMaximum(Calendar.DAY_OF_MONTH),23,59,59);
-        List<HostelExpenses> expenses=hostelExpensesRepository.findByHostelHostelIdAndExpenseDateBetween(hostelId,start.getTime(),end.getTime());
+    public BigDecimal getMonthlyExpenses(Long hostelId, int year, int month) {
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+        List<HostelExpenses> expenses =
+                hostelExpensesRepository
+                        .findByHostelHostelIdAndExpenseDateBetween(
+                                hostelId, start, end
+                        );
         return expenses.stream()
                 .map(HostelExpenses::getAmount)
-                .reduce(BigDecimal.ZERO,BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
 
 
 
     @Override
-    public BigDecimal getYearlyExpenses(Long hostelId,int year){
-        Calendar start=Calendar.getInstance();
-        start.set(year,0,1,0,0,0);
-        Calendar end=Calendar.getInstance();
-        end.set(year,11,31,23,59,59);
-        List<HostelExpenses> expenses=hostelExpensesRepository.findByHostelHostelIdAndExpenseDateBetween(hostelId,start.getTime(),end.getTime());
+    public BigDecimal getYearlyExpenses(Long hostelId, int year) {
+        LocalDate start = LocalDate.of(year, 1, 1);
+        LocalDate end = LocalDate.of(year, 12, 31);
+        List<HostelExpenses> expenses =
+                hostelExpensesRepository
+                        .findByHostelHostelIdAndExpenseDateBetween(
+                                hostelId, start, end
+                        );
         return expenses.stream()
                 .map(HostelExpenses::getAmount)
-                .reduce(BigDecimal.ZERO,BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
 
 
     @Override

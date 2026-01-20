@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -26,9 +27,8 @@ public class HostelExpenses implements Serializable {
     @Column(nullable = false,precision = 12,scale = 2)
     private BigDecimal amount;
 
-    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private Date expenseDate;
+    private LocalDate expenseDate;
 
     public Long getId() {
         return id;
@@ -58,12 +58,11 @@ public class HostelExpenses implements Serializable {
         this.amount = amount;
     }
 
-    public Date getExpenseDate() {
+    public LocalDate getExpenseDate() {
         return expenseDate;
     }
 
-    public void setExpenseDate(Date expenseDate) {
+    public void setExpenseDate(LocalDate expenseDate) {
         this.expenseDate = expenseDate;
     }
-
 }
