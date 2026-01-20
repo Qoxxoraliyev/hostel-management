@@ -4,12 +4,13 @@ import com.hostel.hostel.management.enums.PaymentMethod;
 import com.hostel.hostel.management.enums.PaymentStatus;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 public record PaymentResponseDTO(
         Long paymentId,
         BigDecimal amountPaid,
-        Date paymentDate,
+        LocalDate paymentDate,
         PaymentMethod paymentMethod,
         PaymentStatus paymentStatus
 ) {}

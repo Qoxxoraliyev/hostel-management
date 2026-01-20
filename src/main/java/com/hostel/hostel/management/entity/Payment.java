@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -23,7 +24,7 @@ public class Payment implements Serializable {
     private BigDecimal amountPaid;
 
     @Column(name = "payment_date")
-    private Date paymentDate;
+    private LocalDate paymentDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method",nullable = false)
@@ -53,11 +54,11 @@ public class Payment implements Serializable {
         this.amountPaid = amountPaid;
     }
 
-    public Date getPaymentDate() {
+    public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(Date paymentDate) {
+    public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 

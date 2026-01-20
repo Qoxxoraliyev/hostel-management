@@ -6,7 +6,7 @@ import jakarta.persistence.Temporal;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -29,7 +29,7 @@ public class Fee implements Serializable {
     private FeeStatus status=FeeStatus.UNPAID;
 
     @Temporal(TemporalType.DATE)
-    private Date dueDate;
+    private LocalDate dueDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id",nullable = false)
@@ -74,12 +74,13 @@ public class Fee implements Serializable {
         this.status = status;
     }
 
-    public Date getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
+
 
 }

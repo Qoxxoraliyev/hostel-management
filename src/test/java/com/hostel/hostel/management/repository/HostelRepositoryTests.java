@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -49,7 +51,7 @@ public class HostelRepositoryTests {
         Date dob = calendar.getTime();
         student.setRoom(room);
         student.setAge(18);
-        student.setDob(dob);
+        student.setDob(LocalDate.of(2025,05,04));
         student.setFullName("Davron Kabulov");
         student.setPhone("+998910447417");
         return studentRepository.save(student);

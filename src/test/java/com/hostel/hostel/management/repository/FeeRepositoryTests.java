@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,9 +60,7 @@ public class FeeRepositoryTests {
     public void testFindOverdueFees() {
         Fee overdueFee = new Fee();
         overdueFee.setStatus(FeeStatus.UNPAID);
-        overdueFee.setDueDate(
-                new Date(System.currentTimeMillis() - 86400000)
-        );
+        overdueFee.setDueDate(LocalDate.of(2026,05,05));
 
         List<Fee> overdueFees = new ArrayList<>();
         overdueFees.add(overdueFee);

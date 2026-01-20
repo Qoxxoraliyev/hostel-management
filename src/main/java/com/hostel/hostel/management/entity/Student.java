@@ -3,7 +3,7 @@ package com.hostel.hostel.management.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -26,8 +26,8 @@ public class Student implements Serializable {
     @Column(length = 20)
     private String phone;
 
-    @Temporal(TemporalType.DATE)
-    private Date dob;
+    @Column(name = "dob")
+    private LocalDate dob;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id",nullable = false)
@@ -70,11 +70,11 @@ public class Student implements Serializable {
         this.phone = phone;
     }
 
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 
