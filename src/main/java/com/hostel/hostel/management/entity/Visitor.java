@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "visitor")
@@ -25,7 +26,7 @@ public class Visitor implements Serializable {
     private Time timeOut;
 
     @Column(name = "visit_date")
-    private Date visitDate;
+    private LocalDate visitDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
@@ -59,11 +60,11 @@ public class Visitor implements Serializable {
         this.timeOut = timeOut;
     }
 
-    public Date getVisitDate() {
+    public LocalDate getVisitDate() {
         return visitDate;
     }
 
-    public void setVisitDate(Date visitDate) {
+    public void setVisitDate(LocalDate visitDate) {
         this.visitDate = visitDate;
     }
 
